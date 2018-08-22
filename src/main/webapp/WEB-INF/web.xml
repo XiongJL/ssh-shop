@@ -1,7 +1,28 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>Archetype Created Web Application</display-name>
 
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+	<!-- 相关servlet可以查看以前的servlet 1234 -->
+	<welcome-file-list>
+		<welcome-file>index</welcome-file>
+	</welcome-file-list>
+
+	<filter>
+		<filter-name>struts2</filter-name>
+		<filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+
+		<filter-name>struts2</filter-name>
+		<!-- 访问路径需以 / 开头 -->
+		<!-- 1.精确匹配 <url-pattern>/src</url-pattern> -->
+		<!-- 2.通配符 <url-pattern>/*</url-pattern> -->
+		<!-- 3. 后缀:不允许以 / 开头 -->
+		<!-- /*意味着strust 2 过滤器将应用于此web应用程序的所有url -->
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 </web-app>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd">
+<!-- 我们需要一个映射来将URL，HelloWorldAction 类（控制器）
+和HelloWorld.jsp （视图）绑定在一起。映射告诉Struts 2框架哪个类将响应用户的操作（URL）
+，该类的哪个方法将被执行，以及基于该方法返回的String结果呈现什么视图。 -->
+<struts>
+
+	<constant name="struts.devMode" value="true" />
+	<!-- 这个最小的Struts 2配置文件告诉框架，如果URL是输入的index.action浏览器将重定向到index.jsp -->
+	<package name="basicstruts2" extends="struts-default">
+		<action name="index">
+			<result>/index.jsp</result>
+		</action>
+		
+		<!--  这里的name 里面的hello 就是域名中输入的  hello.actrion! -->
+		<!-- 例如 http://localhost:8080/exchangeSSH/hello.action    -->
+		<!--  用于处理的JSP 放在  WEB-INF 下, 由于这个文件夹无法直接访问到 -->
+		<!-- 所以只能通过view层框架(如struts2,servlet)来访问,避免了用户直接访问到页面 -->
+		<!-- 当然,可以直接写在webapp下. -->
+		<!-- 那么路径就是   /helloworld.jsp -->
+        <action name="hello"   class="strust2test.HelloWorldAction" method="execute">
+            <result name="success">/WEB-INF/struts2/helloworld.jsp</result>
+        </action>
+        
+	</package>
+
+</struts>
