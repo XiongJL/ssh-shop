@@ -24,6 +24,16 @@
             <result name="success">/WEB-INF/struts2/helloworld.jsp</result>
         </action>
         
+        <!-- 整合spring+struts2  
+        	 该action 的 class属性 不是实际处理类,而是Spring容器中的Bean实例的ID
+         -->
+        <action name="register" class="registerAction" method="execute">
+        	<!-- 为两个逻辑视图配置视图页面 -->
+        	<result name="input">/reginfo/register.jsp</result>
+        	<result name="success">/reginfo/success.jsp</result>
+        	<result name="error">/reginfo/fail.jsp</result>
+        </action>
+        
 	</package>
 
 </struts>

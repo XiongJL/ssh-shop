@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  Spring配置文件的根元素，使用spring-beans.xsd语义约束  -->
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!-- 
+		使用无参构造器创建对象.
+		id属性:bean的名称,要求唯一.
+		class属性:类的全限定名(即要求包含包名).
+	 -->
+	
+	
+	 <!-- 如果不加任何特殊的配置, 该Bean默认是 singleton 行为的 -->
+	<!--  如果不想容器预初始化,可以在<bean../> 中指定 lazy-init="true" -->	
+	
+	
+	<!-- 以下是测试Bean
+		正式整合配置文件在  WEB-INF/applicationContext.xml中
+	 -->
+	
+	<!--  配置名为Springperson的Bean,其实现类是service.SpringPerson -->
+	<bean id="SpringPerson" class="impl.SpringPerson">
+		<!--  控制调用setAxe()方法,将容器中的axe Bean作为传入参数 -->
+		<property name="axe" ref="steelAxe"/>
+	</bean>
+	<!--  配置名为Saxe的Bean,其实现类是impl.SpringAxe -->
+	<bean id="Saxe" class="impl.SpringAxe"  lazy-init="true"/>
+	<!--  配置steelAxe实例,其实现类是impl.SteelAxe -->
+	<bean id="steelAxe" class="impl.SteelAxe"/>
+	
+	<!-- 配置构造注入的 chinese实例,其实现类是impl.Chinese -->
+	<bean id="chinese" class="impl.Chinese">
+		<!-- 该子元素,驱动Spring 调用Chinese带一个参数的构造器来创建对象 -->
+		<constructor-arg ref="steelAxe"/>
+	</bean>
+	
+	<!--  ApplicationContext spring上下文测试类 -->
+	
+	<bean id="japanese" class="impl.Japanese">
+		<!-- 驱动Spring 执行 japanese Bean 的setName()方法 ,以"牧宸" 为传入参数-->
+		<property name="name" value="牧宸"/>
+	</bean>
+	
+	
+</beans>

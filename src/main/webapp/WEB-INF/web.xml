@@ -15,7 +15,6 @@
 	</filter>
 
 	<filter-mapping>
-
 		<filter-name>struts2</filter-name>
 		<!-- 访问路径需以 / 开头 -->
 		<!-- 1.精确匹配 <url-pattern>/src</url-pattern> -->
@@ -24,5 +23,13 @@
 		<!-- /*意味着strust 2 过滤器将应用于此web应用程序的所有url -->
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-
+	<!-- 启动Web容器时，自动装配ApplicationContext.xml的配置信息。
+			该监听类实现了ServletContextListener接口 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- 监听HTTP请求事件，Web服务器接收的每次请求都会通知该监听器。 -->
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
 </web-app>

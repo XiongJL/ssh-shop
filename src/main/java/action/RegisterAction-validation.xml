@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN" "http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+	<!-- 添加对用户名的校验 -->
+	<field  name="user.username">
+		<field-validator type="requiredstring"> <!-- 必填字符串验证器,不许为空 -->
+			<param name="trim">true</param>
+			<message>用户名不能为空</message>
+		</field-validator>
+		<field-validator type="regex">
+            <param name="regex"><![CDATA[(^[\d\w]{6,16}$)]]></param>
+
+			<message>用户名输入不合法,长度在6~16的数字或字母</message>
+		</field-validator>
+	</field>
+	
+	<!-- 添加对密码的校验 -->
+	<field name="user.password">
+		<field-validator type="requiredstring">
+			<param name="trim">true</param>
+			<message>密码不能为空</message>
+		</field-validator>
+		<field-validator type="stringlength">  
+            <param name="minLength">6</param>  
+            <param name="maxLength">18</param>  
+            <message>密码长度应在6到18个字符间</message>  
+        </field-validator>  
+	</field>
+</validators>
+
+
+
+
