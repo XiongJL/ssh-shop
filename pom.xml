@@ -35,10 +35,11 @@
 			<artifactId>log4j-api</artifactId>
 			<version>2.9.1</version>
 		</dependency>
+		<!-- hibernate配置 -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-agroal</artifactId>
-			<version>5.3.5.Final</version>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.2.12.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -78,6 +79,12 @@
 
 		<dependency>
 			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
@@ -111,7 +118,23 @@
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+		<!-- spring加入事务AOP后项目启动报错需要添加下包 -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>com.springsource.org.aspectj.weaver</artifactId>
+			<version>1.7.2.RELEASE</version>
+		</dependency>
+
 		<!-- springframe end -->
+
+		<!-- sturst2 -->
+		<!-- 整合ssh所需要的依赖包 -->
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-spring-plugin</artifactId>
+			<version>2.5.8</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>exchangeSSH</finalName>

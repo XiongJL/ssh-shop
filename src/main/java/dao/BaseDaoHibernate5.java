@@ -7,6 +7,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 /**
  *  实现BaseDao接口
  * @author Administrator
@@ -37,7 +39,12 @@ public class BaseDaoHibernate5<T> implements BaseDao<T> {
 
 	// 保存实体
 	public Serializable save(T entity) {
-		return getSessionFactory().getCurrentSession().save(entity);
+		System.out.println("BaseDaoHibernate5保存实体:"+entity);
+		Session session = getSessionFactory().openSession();
+		Serializable num =  session.save(entity);
+		session.close();
+		return num;
+	//	return getSessionFactory().getCurrentSession().save(entity);
 	}
 
 	// 更新实体
@@ -121,18 +128,6 @@ public class BaseDaoHibernate5<T> implements BaseDao<T> {
 			.setMaxResults(pageSize)
 			.getResultList();
 	}
-	public void saveObject(Object obj) throws HibernateException {
-		// TODO Auto-generated method stub
 
-	}
-
-	public Session getSession() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setSession(Session session) {
-		// TODO Auto-generated method stub
-
-	}
+	
 }

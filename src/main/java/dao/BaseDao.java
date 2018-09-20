@@ -16,12 +16,8 @@ import java.util.List;
  *         Session是在Hibernate中使用最频繁的接口。也被称之为持久化管理器。
  *         它提供了和持久化有关的操作，比如添加、修改、删除、加载和查询实体对象。
  */
-public interface BaseDao<T> {
-	public void saveObject(Object obj) throws HibernateException;
 
-	public Session getSession();
-
-	public void setSession(Session session);
+public interface BaseDao<T>{
 	
 	//根据ID加载实体,  Serializable序列化
 	T get(Class<T> entityClazz,Serializable id);

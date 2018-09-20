@@ -1,62 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.springframework.org/schema/beans"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/tx
 	http://www.springframework.org/schema/tx/spring-tx.xsd
 	http://www.springframework.org/schema/aop
 	http://www.springframework.org/schema/aop/spring-aop.xsd">
-	
-	<!-- bean 相关配置说明,查看 resources/Beans.xml -->
-	<!-- 通过spring来管理action 要调用的 逻辑组件,在sturts.xml配置action中,class指向的就是这个组件
-	在Spring bean 的ID,
-	 -->
-	<!-- 部署一个业务逻辑组件,实现类为UserManagerimpl -->
-	<bean id="registerService"  class="impl.UserManagerimpl"/>
-	<!-- 让spring 管理 Action实例,并依赖注入业务逻辑组件
-			而此时sturts.xml中还有一个Action配置,称为 "伪Action"
-	 -->
-	 <!-- 由于每个Action对应一次用户请求,所以不能设置为singlton,
-	 因此必须指定scope属性,其值可谓prototype 或 request -->
-	 <!-- 关于 p标签属性,参照 https://blog.csdn.net/spirit23k/article/details/82147650 -->
-	<bean id="registerAction" class="action.RegisterAction" 
-	scope="prototype" p:userManager-ref="registerService"/>
-	
-	
+
+
 	<!-- Spring 管理Hibernate 的SessionFactory -->
-	
+
 	<!-- 定义数据源Bean,使用C3P0数据源实现,并注入数据源的必要信息 -->
-	<!-- BasicDataSource提供了close()方法关闭数据源，所以必须设定destroy-method=”close”属性，
-	 以便Spring容器关闭时，数据源能够正常关闭；
-	 销毁方法调用close(),是将连接关闭，并不是真正的把资源销毁。 -->
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close"
-		p:driverClass="com.mysql.jdbc.Driver"
-		p:jdbcUrl="jdbc:mysql://localhost:3306/exchangessh?characterEncoding=UTF-8"
+	<!-- BasicDataSource提供了close()方法关闭数据源，所以必须设定destroy-method=”close”属性， 以便Spring容器关闭时，数据源能够正常关闭； 
+		销毁方法调用close(),是将连接关闭，并不是真正的把资源销毁。 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close" p:driverClass="com.mysql.jdbc.Driver"
+		p:jdbcUrl="jdbc:mysql://localhost:3306/exchangessh?characterEncoding=UTF-8&amp;useSSL=true"
 		p:user="root"
-		p:password="246810"
+		p:password="246810" 
 		p:maxPoolSize="40"
 		p:minPoolSize="2"
-		p:initialPoolSize="2"
-		p:maxIdleTime="30"
-	/>
-	
-	
-	<!-- 定义Hibernate的SessionFactory, SessionFactory需要依赖数据源(上面的),注入
-		dataSource
-	 -->
-	 <!-- SessionFactory Bean 注入任何Bean中,比如DAO组件,那么DAO主见就可以完成实际的数据库访问 -->
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" 
-	p:dataSource-ref="dataSource" >
+		p:initialPoolSize="2" 
+		p:maxIdleTime="30" />
+	<!-- 定义Hibernate的SessionFactory, SessionFactory需要依赖数据源(上面的),注入 dataSource -->
+	<!-- SessionFactory Bean 注入任何Bean中,比如DAO组件,那么DAO主见就可以完成实际的数据库访问 -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
+		p:dataSource-ref="dataSource">
 		<!-- annotatedClasses 用来列出全部持久化类 -->
 		<property name="annotatedClasses">
 			<list>
 				<!-- 以下用来列出所有的PO(持久化)类 -->
 				<value>beans.User</value>
-			</list>		
+			</list>
 		</property>
 		<!-- 定义Hibernate SessionFactory的属性 -->
 		<property name="hibernateProperties">
@@ -72,32 +50,53 @@
 	</bean>
 	
 	
-	
-	
+	<!-- 让spring 管理 Action实例,并依赖注入业务逻辑组件 而此时sturts.xml中还有一个Action配置,称为 "伪Action" -->
+	<!-- 由于每个Action对应一次用户请求,所以不能设置为singlton, 因此必须指定scope属性,其值可谓prototype 或 request -->
+	<!-- 关于 p标签属性,参照 https://blog.csdn.net/spirit23k/article/details/82147650 -->
+	<bean id="registerAction" class="action.RegisterAction" scope="request"
+		p:userManager-ref="userManager" />
+		
+	 <bean name="findAction" class="action.FindAction" scope="request"
+		p:userManager-ref="userManager"/>
+		
+	<!-- bean 相关配置说明,查看 resources/Beans.xml -->
+	<!-- 通过spring来管理action 要调用的 逻辑组件,在sturts.xml配置action中,class指向的就是这个组件 在Spring 
+		bean 的ID, -->
+	<!-- 定义service(业务逻辑)组件,实现类为UserManagerimpl ,并将DAO组件注入Service组件 -->
+	<bean id="userManager" class="impl.UserManagerimpl" p:userDao-ref="userDao" />
+
+	<!-- 定义DAO组件,并将SessionFactory注入DAO组件 -->
+	<bean id="userDao" class="dao.UserDaoHibernate5"
+		p:sessionFactory-ref="sessionFactory" />
+
+	<!-- 测试spring注入sessionfactory是否成功 -->
+	<bean id="udh5" class="dao.UserDaoHibernate5" p:sessionFactory-ref="sessionFactory"/>
+
+
 	<!-- 配置Hibernate的局部事务管理器,使用HibernateTransactionManager类 -->
 	<!-- 该类是PlatformTransactionManager 接口针对采用Hibernate的特定实现类 -->
 	<!-- 配置HibernateTransactionManager 需要依赖注入SessionFactory -->
-	<bean id="transactionManager" 
+	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate5.HibernateTransactionManager"
-		p:sessionFactory-ref="sessionFactory"/>
+		p:sessionFactory-ref="sessionFactory" />
+
 	<!-- 配置事务增强处理Bean,指定事务管理器 -->
-	<tx:advice id="txAdvice" 
-		transaction-manager="transactionManager">
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<!-- 用于配置详细的事务定义 -->
 		<tx:attributes>
 			<!-- 所有以'get'开头的方法是read-only的 -->
-			<tx:method name="get*" read-only="true"/>
+			<tx:method name="get*" read-only="true" />
 			<!-- 其他方法使用默认的事务设置，指定超时时长为5秒 -->
-			<tx:method name="*" isolation="DEFAULT"
-				propagation="REQUIRED" timeout="5"/>
+			<tx:method name="*" isolation="DEFAULT" propagation="REQUIRED"
+				timeout="5" />
 		</tx:attributes>
 	</tx:advice>
 	<!-- AOP配置的元素 -->
 	<aop:config>
 		<!-- 配置一个切入点 -->
-		<aop:pointcut id="myPointcut" expression="bean(registerService)"/>
+		<aop:pointcut id="myPointcut" expression="bean(userManager)" />
 		<!-- 指定在myPointcut切入点应用txAdvice事务增强处理 -->
-		<aop:advisor advice-ref="txAdvice" 
-			pointcut-ref="myPointcut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="myPointcut" />
 	</aop:config>
+
 </beans>

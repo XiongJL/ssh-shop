@@ -26,7 +26,7 @@ public class RegisterAction extends ActionSupport {
 	 * 那么反序列化的时候就不会变成原始的类了，还会抛异常，主要就是用于版本控制。
 	 */
 	private static final long serialVersionUID = 1L;
-	private UserForm user;
+	private User user;
 	//系统所用的业务逻辑组件
 	private UserManager userManager;
 	//设值注入业务逻辑组件所必须的setter方法
@@ -34,12 +34,15 @@ public class RegisterAction extends ActionSupport {
 	public void setUserManager(UserManager userManager) {
 		this.userManager = userManager;
 	}
-	public UserForm getUser() {
+	
+	public User getUser() {
 		return user;
 	}
-	public void setUser(UserForm user) {
+
+	public void setUser(User user) {
 		this.user = user;
 	}
+
 	public UserManager getUserManager() {
 		return userManager;
 	}
@@ -47,8 +50,10 @@ public class RegisterAction extends ActionSupport {
 	//处理用户请求的execute方法
 	public String execute(){
 		try {
-			this.setUserManager(new UserManagerimpl());
+			//this.setUserManager(new UserManagerimpl());
 			//调用业务逻辑组件的regUser(User user) 方法.
+			//能读取到用户输入
+			System.out.println(user);
 			userManager.regUser(user);
 			return SUCCESS;
 		} catch (Exception e) {

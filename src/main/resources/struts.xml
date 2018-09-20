@@ -9,7 +9,7 @@
 
 	<constant name="struts.devMode" value="true" />
 	<!-- 这个最小的Struts 2配置文件告诉框架，如果URL是输入的index.action浏览器将重定向到index.jsp -->
-	<package name="basicstruts2" extends="struts-default">
+	<package name="basicstruts2" namespace="/" extends="struts-default">
 		<action name="index">
 			<result>/index.jsp</result>
 		</action>
@@ -26,14 +26,28 @@
         
         <!-- 整合spring+struts2  
         	 该action 的 class属性 不是实际处理类,而是Spring容器中的Bean实例的ID
+        	 //
+        	 但此处让spring插件的自动装配机制将业务逻辑组件注入到了Action实例中
+        	 所以此处配置后，该action即可调用所需的Usermanager组件的regUser()方法
          -->
         <action name="register" class="registerAction" method="execute">
         	<!-- 为两个逻辑视图配置视图页面 -->
-        	<result name="input">/reginfo/register.jsp</result>
-        	<result name="success">/reginfo/success.jsp</result>
-        	<result name="error">/reginfo/fail.jsp</result>
+        	<result name="input">/WEB-INF/reginfo/register.jsp</result>
+        	<result name="success">/WEB-INF/reginfo/success.jsp</result>
+        	<result name="error">/WEB-INF/reginfo/fail.jsp</result>
+        </action>
+        <action name="find" class="findAction" method="execute">
+        	<!-- 为两个逻辑视图配置视图页面 -->
+        	<result name="success">/WEB-INF/search/findAll.jsp</result>
         </action>
         
+        
+        	<!-- 对于任意请求,直接呈现WEB-INF/reginfo 目录下同名的JSP页面 
+			http://localhost:8080/exchangeSSHCopy/register   不用加后缀
+		-->
+		<action name="*">
+			<result>/WEB-INF/reginfo/{1}.jsp</result>
+		</action>
 	</package>
 
 </struts>
